@@ -50,7 +50,7 @@ services:
     expose:
       - 9091
     environment:
-      TZ: Africa/Mogadishu
+      TZ: "${TIME_ZONE}"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.authelia.rule=Host(`authelia.somtube.com`)"
@@ -64,7 +64,7 @@ services:
     container_name: jellyfin
     restart: unless-stopped
     environment:
-      - TZ=Africa/Mogadishu
+      - TZ="${TIME_ZONE}"
       - PUID=1000
       - PGID=1000
     volumes:
@@ -81,7 +81,7 @@ services:
     container_name: sonarr
     restart: unless-stopped
     environment:
-      - TZ=Africa/Mogadishu
+      - TZ="${TIME_ZONE}"
       - PUID=1000
       - PGID=1000
     volumes:
@@ -99,7 +99,7 @@ services:
     container_name: radarr
     restart: unless-stopped
     environment:
-      - TZ=Africa/Mogadishu
+      - TZ="${TIME_ZONE}"
       - PUID=1000
       - PGID=1000
     volumes:
@@ -117,7 +117,7 @@ services:
     container_name: bazarr
     restart: unless-stopped
     environment:
-      - TZ=Africa/Mogadishu
+      - TZ="${TIME_ZONE}"
       - PUID=1000
       - PGID=1000
     volumes:
@@ -135,7 +135,7 @@ services:
     container_name: jellyseerr
     restart: unless-stopped
     environment:
-      - TZ=Africa/Mogadishu
+      - TZ="${TIME_ZONE}"
       - PUID=1000
       - PGID=1000
     volumes:
@@ -151,7 +151,7 @@ services:
     container_name: jfa-go
     restart: unless-stopped
     environment:
-      - TZ=Africa/Mogadishu
+      - TZ="${TIME_ZONE}"
       - PUID=1000
       - PGID=1000
     volumes:
@@ -167,6 +167,7 @@ services:
     container_name: homer
     restart: unless-stopped
     environment:
+      - TZ="${TIME_ZONE}"
       - PUID=1000
       - PGID=1000
     volumes:
@@ -182,6 +183,7 @@ services:
     container_name: filebrowser
     restart: unless-stopped
     environment:
+      - TZ="${TIME_ZONE}"
       - PUID=1000
       - PGID=1000
       - FB_BASEURL=/
