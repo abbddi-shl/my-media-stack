@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # ────────────────────────────────
   # TRAEFIK REVERSE PROXY
@@ -29,8 +27,8 @@ services:
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
       - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
       # Domains
-      - "--entrypoints.websecure.http.tls.domains[0].main=somtube.com"
-      - "--entrypoints.websecure.http.tls.domains[0].sans=*.somtube.com"
+      - "--entrypoints.websecure.http.tls.domains[0].main=.${MY_DOMAIN}"
+      - "--entrypoints.websecure.http.tls.domains[0].sans=*..${MY_DOMAIN}"
     ports:
       - "80:80"
       - "443:443"
@@ -41,7 +39,7 @@ services:
       DUCKDNS_TOKEN: "${DUCKDNS_TOKEN}"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`traefik.somtube.com`)"
+      - "traefik.http.routers.api.rule=Host(`${MY_DOMAIN}`)"
       - "traefik.http.routers.api.entryPoints=websecure"
       - "traefik.http.routers.api.service=api@internal"
       - "traefik.http.routers.api.middlewares=authelia@docker"
@@ -68,7 +66,7 @@ services:
       TZ: "${TIME_ZONE}"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.authelia.rule=Host(`authelia.somtube.com`)"
+      - "traefik.http.routers.authelia.rule=Host(`auth.${MY_DOMAIN}`)"
       - "traefik.http.routers.authelia.entryPoints=websecure"
       - "traefik.http.middlewares.authelia.forwardAuth.address=http://authelia:9091/api/authz/forward-auth"
       - "traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader=true"
@@ -91,7 +89,7 @@ services:
       - ./data/media/tv:/tv
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jellyfin.rule=Host(`somtube.com`)"
+      - "traefik.http.routers.jellyfin.rule=Host(`fiirso.${MY_DOMAIN}`)"
       - "traefik.http.routers.jellyfin.entryPoints=websecure"
 
   # ────────────────────────────────
@@ -111,7 +109,7 @@ services:
       - ./data/media/downloads:/downloads
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.sonarr.rule=Host(`sonarr.somtube.com`)"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.${MY_DOMAIN}`)"
       - "traefik.http.routers.sonarr.entryPoints=websecure"
       - "traefik.http.routers.sonarr.middlewares=authelia@docker"
 
@@ -129,7 +127,7 @@ services:
       - ./data/media/downloads:/downloads
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.radarr.rule=Host(`radarr.somtube.com`)"
+      - "traefik.http.routers.radarr.rule=Host(`radarr.${MY_DOMAIN}`)"
       - "traefik.http.routers.radarr.entryPoints=websecure"
       - "traefik.http.routers.radarr.middlewares=authelia@docker"
 
@@ -147,7 +145,7 @@ services:
       - ./data/media/tv:/tv
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.bazarr.rule=Host(`bazarr.somtube.com`)"
+      - "traefik.http.routers.bazarr.rule=Host(`bazarr.${MY_DOMAIN}`)"
       - "traefik.http.routers.bazarr.entryPoints=websecure"
       - "traefik.http.routers.bazarr.middlewares=authelia@docker"
 
@@ -166,7 +164,7 @@ services:
       - ./data/jellyseerr/config:/app/config
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jellyseerr.rule=Host(`requests.somtube.com`)"
+      - "traefik.http.routers.jellyseerr.rule=Host(`requests.${MY_DOMAIN}`)"
       - "traefik.http.routers.jellyseerr.entryPoints=websecure"
       - "traefik.http.routers.jellyseerr.middlewares=authelia@docker"
 
@@ -185,7 +183,7 @@ services:
       - ./data/jfa-go:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jfa.rule=Host(`accounts.somtube.com`)"
+      - "traefik.http.routers.jfa.rule=Host(`accounts.${MY_DOMAIN}`)"
       - "traefik.http.routers.jfa.entryPoints=websecure"
       - "traefik.http.routers.jfa.middlewares=authelia@docker"
 
@@ -204,7 +202,7 @@ services:
       - ./data/homer:/www/assets
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.homer.rule=Host(`dashboard.somtube.com`)"
+      - "traefik.http.routers.homer.rule=Host(`dashboard.${MY_DOMAIN}`)"
       - "traefik.http.routers.homer.entryPoints=websecure"
       - "traefik.http.routers.homer.middlewares=authelia@docker"
 
@@ -225,6 +223,6 @@ services:
       - ./data/filebrowser/config:/config
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.filebrowser.rule=Host(`filebrowser.somtube.com`)"
+      - "traefik.http.routers.filebrowser.rule=Host(`filebrowser.${MY_DOMAIN}`)"
       - "traefik.http.routers.filebrowser.entryPoints=websecure"
       - "traefik.http.routers.filebrowser.middlewares=authelia@docker"
